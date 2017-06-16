@@ -13,5 +13,9 @@ if [[ "$1" == "-h" ]]; then
 	exec /usr/libexec/s2i/usage
 fi
 
-echo "---> Installing application source..."
-cp -Rf /tmp/src/. ./
+echo "---> Installing dependencies..."
+cd /tmp/src
+yarn
+echo "---> Building application from source..."
+yarn run build
+cp -Rf /tmp/src/build/. ./
