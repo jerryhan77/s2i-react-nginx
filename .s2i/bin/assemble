@@ -18,4 +18,4 @@ cd /tmp/src
 yarn
 echo "---> Building application from source..."
 yarn run build
-cp -Rf /tmp/src/build/* /usr/share/nginx/html/
+cp -Rf /tmp/src/build/. /opt/app-root/src/
