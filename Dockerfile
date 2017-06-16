@@ -4,12 +4,19 @@ MAINTAINER Julian Tescher <julian@outtherelabs.com>
 
 # Current stable version
 ENV NGINX_VERSION=1.10.2
+ENV SUMMARY="Platform for building and running React frontend applications" \
 
 # Set labels used in OpenShift to describe the builder images
-LABEL io.k8s.description="Platform for serving frontend React apps" \
+LABEL summary="$SUMMARY" \
+      io.k8s.description="Platform for serving frontend React apps" \
       io.k8s.display-name="Create React App" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,html,nginx"
+      io.openshift.tags="builder,html,react,javascript" \
+      name="create-react-app" \
+      version="1.0" \
+      release="1" \
+      maintainer="Joao Soares <joao.soares@bigdelivery.com.br>"
+
 
 # Add yum repo for nginx
 ADD etc/nginx.repo /etc/yum.repos.d/nginx.repo
