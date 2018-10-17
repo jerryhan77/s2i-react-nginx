@@ -19,3 +19,5 @@ yarn
 echo "---> Building application from source..."
 yarn run build
 cp -Rf /tmp/src/dist/. /opt/app-root/src/
+yarn cache clean
+/bin/rm -rf /tmp/src/*
