@@ -15,9 +15,10 @@ fi
 
 echo "---> Installing dependencies..."
 cd /tmp/src
-yarn
+yarn --silent
 echo "---> Building application from source..."
 yarn run build
 cp -Rf /tmp/src/dist/. /opt/app-root/src/
+echo "---> Cleaning source and cache..."
 yarn cache clean
-/bin/rm -rf /tmp/src/*
+rm -rf /tmp/src/*
