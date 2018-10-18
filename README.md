@@ -24,7 +24,7 @@ For more information about using these images with OpenShift, please see the off
 使用下面的命令在当前项目空间创建Image/ImageStream:
 
 ```bash
-oc new-build https://git.liandisys.com.cn/hz/s2i-react-nginx.git --strategy=docker`
+oc new-build https://git.liandisys.com.cn/hz/s2i-react-nginx.git --strategy=docker
 ```
 
 也可以在openshift公共区创建，以便多个项目共用:
@@ -33,7 +33,7 @@ oc new-build https://git.liandisys.com.cn/hz/s2i-react-nginx.git --strategy=dock
 oc new-build https://git.liandisys.com.cn/hz/s2i-react-nginx.git --strategy=docker -n openshift
 ```
 
-### 使用之前创建的S2I Builder发布代码
+### 使用之前创建的S2I Builder构建应用镜像
 
 
 ```bash
@@ -48,7 +48,7 @@ oc new-build https://git.liandisys.com.cn/hz/ant-design-pro.git --strategy=sourc
 oc new-build https://git.liandisys.com.cn/hz/antd-admin.git#ocp-4.3.9 --strategy=source --image-stream=openshift/s2i-react-nginx:latest
 ```
 
-应用的Image构建成功后就可以将应用发布了。
+应用的镜像构建成功后就可以将应用发布了。
 
 也可以使用以下的命令直接完成应用的构建和发布:
 
