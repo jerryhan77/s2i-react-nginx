@@ -33,6 +33,10 @@ oc new-build https://git.liandisys.com.cn/hz/s2i-react-nginx.git --strategy=dock
 oc new-build https://git.liandisys.com.cn/hz/s2i-react-nginx.git --strategy=docker -n openshift
 ```
 
+目前zeus环境已经在OpenShift公共区构建了本S2I Builder Image, 可以直接使用。
+
+项目可以本项目为蓝本进行定制修改。
+
 ### 使用之前创建的S2I Builder构建应用镜像
 
 
@@ -50,7 +54,7 @@ oc new-build https://git.liandisys.com.cn/hz/antd-admin.git#ocp-4.3.9 --strategy
 
 应用的镜像构建成功后就可以将应用发布了。
 
-也可以使用以下的命令直接完成应用的构建和发布:
+当然，也可以使用以下的命令直接完成应用的构建和发布:
 
 ```bash
 oc new-app openshift/s2i-react-nginx~https://git.liandisys.com.cn/hz/ant-design-pro.git
