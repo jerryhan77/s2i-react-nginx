@@ -64,3 +64,69 @@ oc new-app openshift/s2i-react-nginx~https://git.liandisys.com.cn/hz/ant-design-
 
  * 最终Image包含Node.JS/Yarn的Package, 镜像Size大约为540M, 不够精简。如果用Multi-Stage方式选择类似alpine作为最终的Base Image的话可以大大降低容器的尺寸。
  * 使用本S2I Builder进行yarn构建时需要下载所有的依赖包，耗时较多, 可以在S2I Builder构建时增加下载依赖包的过程提速。
+
+### Openshift Chain-Build
+
+针对上述的不足，为了尽可能减少Runtime Image的大小，可以使用OpenShift的Chain-Build功能，将整个应用的构建过程分为两个Stage：
+ 1. 使用s2i-react-nginx作为Builder，构建出包含有Node.JS编译结果-静态HTML文件的Docker映像
+ 2. 新建一个Docker Build，在Dockerfile设置为从上一步产生的Image中，将编译结果文件复制到另外一个只含有运行环境Image，从而获得最终用于发布的Docker映像
+
+以前面的应用为例，ant-design-pro:latest已经包含了NodeJS的编译结果，但我们并不用它发布应用。
+
+首先创建一个BuildConfig - image-build.yml：
+
+```
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  name: image-build
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: image-build:latest
+  source:
+    type: Dockerfile
+    dockerfile: |-
+      FROM apache:latest
+      COPY ./src/ /opt/bitnami/apache/htdocs/
+    images:
+    - from: 
+        kind: ImageStreamTag
+        name: ant-design-pro:latest
+      paths: 
+      - sourcePath: /opt/app-root/src/
+        destinationDir: "."
+  strategy:
+    dockerStrategy:
+      from: 
+        kind: ImageStreamTag
+        name: apache:latest
+    type: Docker
+  triggers:
+  - imageChange: {}
+    type: ImageChange
+```
+
+使用以下命令创建本BC及相关的ImageStream：
+```
+oc create is apache
+oc create imagestreamtag apache:latest --from-image=docker.io/bitnami/apache:latest
+oc create is image-build
+oc create imagestreamtag image-build:latest
+oc create -f image-build.yml
+```
+
+如果Build成功，就可以用image-build:latest发布应用了。
+
+让我们比较一下采用不同Build策略获得的Runtime Image大小差别:
+
+| Base Image | Size (MiB) | Size in WebConsole (MiB) |
+|----------|----------|----------|
+| s2i-react-nginx | 543 | 192.8 |
+| centos/httpd-24-centos7 | 362 | 133.8 |
+| bitnami/apache:latest | 162 | 62.7 |
+
+很明显，用Chain-Build大幅消减了最终Runtime Image的大小，如果采用alpine的Image作为Base，还能更小。
+
+不过，Alpine的Image不太适合在Openshift中使用，有能力的人可以自己制作。
