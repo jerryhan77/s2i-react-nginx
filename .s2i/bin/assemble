@@ -21,4 +21,4 @@ yarn run build
 cp -Rf /tmp/src/dist/. /opt/app-root/src/
 echo "---> Cleaning source and cache..."
 yarn cache clean
-rm -rf /tmp/src/*
+rm -rf /tmp/src/* /opt/app-root/src/.config /opt/app-root/src/.cache /opt/app-root/src/.yarn
