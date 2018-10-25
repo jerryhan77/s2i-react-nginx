@@ -73,7 +73,49 @@ oc new-app openshift/s2i-react-nginx~https://git.liandisys.com.cn/hz/ant-design-
 
 以前面的应用为例，ant-design-pro:latest已经包含了NodeJS的编译结果，但我们并不用它发布应用。
 
-首先创建一个BuildConfig - image-build.yml：
+选择哪个Runtime Image呢？
+
+ * `centos/httpd-24-centos7:latest` - OpenShift提供的基于CentOS 7的原生apache 2.4镜像，还不够精练。
+ * `bitnami/apache:latest` - 可以在OpenShift中使用，比上一个小一些。但是特别要小心，如果Docker Storage Driver为Overlay的环境会运行失败。
+
+下面这个BuildConfig采用`centos/httpd-24-centos7:latest`作为Runtime - image-build.yml：
+
+```
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  name: image-build
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: image-build:latest
+  source:
+    type: Dockerfile
+    dockerfile: |-
+      FROM httpd:latest
+      COPY ./src/ /tmp/src/
+      RUN /usr/libexec/s2i/assemble
+    images:
+    - from: 
+        kind: ImageStreamTag
+        name: ant-design-pro:latest
+      paths: 
+      - sourcePath: /opt/app-root/src/
+        destinationDir: "."
+  strategy:
+    dockerStrategy:
+      from: 
+        kind: ImageStreamTag
+        name: httpd:latest
+        namespace: openshift
+    type: Docker
+  triggers:
+  - imageChange: {}
+    type: ImageChange
+```
+
+如果环境许可，也可以使用下面采用`bitnami/apache:latest`作为Runtime的BuildConfig - image-build.yml：
 
 ```
 apiVersion: v1
@@ -124,9 +166,9 @@ oc create -f image-build.yml
 | Base Image | Size (MiB) | Size in WebConsole (MiB) |
 |----------|----------|----------|
 | s2i-react-nginx | 543 | 192.8 |
-| centos/httpd-24-centos7 | 362 | 133.8 |
+| centos/httpd-24-centos7:latest | 362 | 133.8 |
 | bitnami/apache:latest | 162 | 62.7 |
 
 很明显，用Chain-Build大幅消减了最终Runtime Image的大小，如果采用alpine的Image作为Base，还能更小。
 
-不过，Alpine的Image不太适合在Openshift中使用，有能力的人可以自己制作。
+不过，Alpine的Image不太适合在Openshift中使用，有精力的话可以以此为基础构建一个更小的镜像。
