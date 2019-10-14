@@ -15,7 +15,7 @@ For more information about using these images with OpenShift, please see the off
  * 采用Yarn进行Build
  * Build产生的静态内容，由Nginx作为Web Server
 
-在OpenShift 3.7/3.10环境测试通过。
+在OpenShift 3.7/3.11环境测试通过。
 
 ## 使用方法
 
@@ -68,15 +68,15 @@ oc new-app openshift/s2i-react-nginx~https://git.liandisys.com.cn/hz/ant-design-
 ### Openshift Chain-Build
 
 针对上述的不足，为了尽可能减少Runtime Image的大小，可以使用OpenShift的Chain-Build功能，将整个应用的构建过程分为两个Stage：
- 1. 使用s2i-react-nginx作为Builder，构建出包含有Node.JS编译结果-静态HTML文件的Docker映像
- 2. 新建一个Docker Build，在Dockerfile设置为从上一步产生的Image中，将编译结果文件复制到另外一个只含有运行环境Image，从而获得最终用于发布的Docker映像
+ 1. 使用s2i-react-nginx作为Builder，构建出包含有Node.JS编译结果-静态HTML文件的Docker映像
+ 2. 新建一个Docker Build，在Dockerfile设置为从上一步产生的Image中，将编译结果文件复制到另外一个只含有运行环境Image，从而获得最终用于发布的Docker映像
 
-以前面的应用为例，ant-design-pro:latest已经包含了NodeJS的编译结果，但我们并不用它发布应用。
+以前面的应用为例，ant-design-pro:latest已经包含了NodeJS的编译结果，但我们并不用它发布应用。
 
 选择哪个Runtime Image呢？
 
- * `centos/httpd-24-centos7:latest` - OpenShift提供的基于CentOS 7的原生apache 2.4镜像，还不够精练。
- * `bitnami/apache:latest` - 可以在OpenShift中使用，比上一个小一些。但是特别要小心，如果Docker Storage Driver为Overlay的环境会运行失败。
+ * `centos/httpd-24-centos7:latest` - OpenShift提供的基于CentOS 7的原生apache 2.4镜像，还不够精练。
+ * `bitnami/apache:latest` - 可以在OpenShift中使用，比上一个小一些。但是特别要小心，如果Docker Storage Driver为Overlay的环境会运行失败。
 
 下面这个BuildConfig采用`centos/httpd-24-centos7:latest`作为Runtime - image-build.yml：
 
@@ -159,7 +159,7 @@ oc create imagestreamtag image-build:latest
 oc create -f image-build.yml
 ```
 
-如果Build成功，就可以用image-build:latest发布应用了。
+如果Build成功，就可以用image-build:latest发布应用了。
 
 让我们比较一下采用不同Build策略获得的Runtime Image大小差别:
 
