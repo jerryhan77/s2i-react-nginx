@@ -16,7 +16,7 @@ ADD etc/nginx.repo /etc/yum.repos.d/nginx.repo
 
 # Install the current version, node and yarn
 RUN yum install -y wget && \
-    curl --silent --location https://rpm.nodesource.com/setup_12.x | bash - && \
+    curl --silent --location https://rpm.nodesource.com/setup_13.x | bash - && \
     wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo && \
     yum install -y --setopt=tsflags=nodocs nginx-$NGINX_VERSION && \
     yum install -y nodejs yarn gcc-c++ make && \
