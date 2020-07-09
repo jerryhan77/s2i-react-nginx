@@ -60,6 +60,8 @@ oc new-build https://git.liandisys.com.cn/hz/antd-admin.git#ocp-4.3.9 --strategy
 oc new-app openshift/s2i-react-nginx~https://git.liandisys.com.cn/hz/ant-design-pro.git
 ```
 
+为了提高NodeJS的构建速度，可以在BC中添加环境变量(`NPM_CONFIG_REGISTRY=https://registry.npm.taobao.org`)，指定使用国内的源。
+
 ## 不足
 
  * 最终Image包含Node.JS/Yarn的Package, 镜像Size大约为540M, 不够精简。如果用Multi-Stage方式选择类似alpine作为最终的Base Image的话可以大大降低容器的尺寸。
