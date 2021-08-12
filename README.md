@@ -174,3 +174,11 @@ oc create -f image-build.yml
 很明显，用Chain-Build大幅消减了最终Runtime Image的大小，如果采用alpine的Image作为Base，还能更小。
 
 不过，Alpine的Image不太适合在Openshift中使用，有精力的话可以以此为基础构建一个更小的镜像。
+
+## 参考资料
+
+ * [Modern web applications on OpenShift: Part 1 -- Web apps in two commands](https://developers.redhat.com/blog/2018/10/04/modern-web-apps-openshift-part-1)
+ * [Modern web applications on OpenShift: Part 2 -- Using chained builds](https://developers.redhat.com/blog/2018/10/23/modern-web-applications-on-openshift-part-2-using-chained-builds)
+ * [Modern web applications on OpenShift: Part 3 -- Openshift as a development environment](https://developers.redhat.com/blog/2019/01/17/modern-web-applications-on-openshift-part-3-openshift-as-a-development-environment)
+ * [Modern web applications on OpenShift, Part 4: Openshift Pipelines](https://developers.redhat.com/blog/2020/04/27/modern-web-applications-on-openshift-part-4-openshift-pipelines)
+
