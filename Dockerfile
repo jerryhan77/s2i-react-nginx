@@ -1,4 +1,6 @@
-FROM centos:centos7
+#FROM redhat/ubi8
+#FROM centos:centos8
+FROM quay.io/centos/centos:stream8
 
 MAINTAINER Julian Tescher <julian@outtherelabs.com>
 
@@ -16,7 +18,7 @@ ADD etc/nginx.repo /etc/yum.repos.d/nginx.repo
 
 # Install the current version, node and yarn
 RUN yum install -y wget && \
-    curl --silent --location https://rpm.nodesource.com/setup_16.x | bash - && \
+    curl --silent --location https://rpm.nodesource.com/setup_18.x | bash - && \
     wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo && \
     yum install -y --setopt=tsflags=nodocs nginx-$NGINX_VERSION && \
     yum install -y nodejs yarn gcc-c++ make && \
