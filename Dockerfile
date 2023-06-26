@@ -5,6 +5,8 @@ MAINTAINER Julian Tescher <julian@outtherelabs.com>
 # Current stable version
 ENV NGINX_VERSION=1.10.2
 
+ENV HOME=/tmp
+
 # Set labels used in OpenShift to describe the builder images
 LABEL io.k8s.description="Platform for serving frontend React apps" \
       io.k8s.display-name="Create React App" \
