@@ -24,12 +24,14 @@ RUN yum install -y wget && \
 
 # Install source to image
 COPY ./.s2i/bin/ /usr/libexec/s2i
+#COPY --chmod=755 ./.s2i/bin/ /usr/libexec/s2i
 
 # Copy the nginx config file
 COPY ./etc/nginx.conf /etc/nginx/conf.d/default.conf
 
 RUN mkdir /.config && chown -R 1001:1001 /.config && \
     mkdir /.cache && chown -R 1001:1001 /.cache && \
+    chmod 755 /usr/libexec/s2i/* && \
     chmod -R 777 /var/log/nginx /var/cache/nginx/ \
     && chmod 777 /var/run \
     && chmod 644 /etc/nginx/* \
