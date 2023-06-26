@@ -7,6 +7,8 @@ MAINTAINER Julian Tescher <julian@outtherelabs.com>
 # Current stable version
 ENV NGINX_VERSION=1.18.0
 
+ENV HOME=/tmp
+
 # Set labels used in OpenShift to describe the builder images
 LABEL io.k8s.description="Platform for serving frontend React apps" \
       io.k8s.display-name="Create React App" \
@@ -32,6 +34,7 @@ COPY ./etc/nginx.conf /etc/nginx/conf.d/default.conf
 
 RUN mkdir /.config && chown -R 1001:1001 /.config && \
     mkdir /.cache && chown -R 1001:1001 /.cache && \
+    chmod 755 /usr/libexec/s2i/* && \
     chmod -R 777 /var/log/nginx \
     && chmod 777 /var/run \
     && chmod 644 /etc/nginx/* \
