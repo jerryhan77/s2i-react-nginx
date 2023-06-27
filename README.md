@@ -181,4 +181,5 @@ oc create -f image-build.yml
  * [Modern web applications on OpenShift: Part 2 -- Using chained builds](https://developers.redhat.com/blog/2018/10/23/modern-web-applications-on-openshift-part-2-using-chained-builds)
  * [Modern web applications on OpenShift: Part 3 -- Openshift as a development environment](https://developers.redhat.com/blog/2019/01/17/modern-web-applications-on-openshift-part-3-openshift-as-a-development-environment)
  * [Modern web applications on OpenShift, Part 4: Openshift Pipelines](https://developers.redhat.com/blog/2020/04/27/modern-web-applications-on-openshift-part-4-openshift-pipelines)
+ * [OpenShift base images](https://github.com/sclorg/s2i-base-container)
 
