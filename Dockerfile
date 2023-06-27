@@ -1,17 +1,9 @@
-#FROM redhat/ubi8
-#FROM centos:centos8
-FROM quay.io/centos/centos:stream8
+FROM quay.io/sclorg/s2i-core-c8s:latest
 
-MAINTAINER Julian Tescher <julian@outtherelabs.com>
+MAINTAINER Jerry Han <hz@liandisys.com.cn>
 
 # Current stable version
-ENV NGINX_VERSION=1.18.0 \
-    HOME=/opt/app-root/src \
-    BASH_ENV=/opt/app-root/etc/scl_enable \
-    ENV=/opt/app-root/etc/scl_enable \
-    STI_SCRIPTS_URL=image:///usr/libexec/s2i \
-    STI_SCRIPT_PATH=/usr/libexec/s2i \
-    PATH=/opt/app-root/src/bin:/opt/app-root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV NGINX_VERSION=1.18.0
 
 # Set labels used in OpenShift to describe the builder images
 LABEL io.k8s.description="Platform for serving frontend React apps" \
@@ -38,16 +30,12 @@ COPY ./etc/nginx.conf /etc/nginx/conf.d/default.conf
 
 RUN mkdir /.config && chown -R 1001:1001 /.config && \
     mkdir /.cache && chown -R 1001:1001 /.cache && \
-    mkdir -p /opt/app-root/src && mkdir /opt/app-root/etc && chown -R 1001 /opt/app-root && \
     chmod 755 /usr/libexec/s2i/* && \
     chmod -R 777 /var/log/nginx \
     && chmod 777 /var/run \
     && chmod 644 /etc/nginx/* \
     && chmod 755 /etc/nginx/conf.d \
     && chmod 644 /etc/nginx/conf.d/default.conf
-
-COPY --chown=1001 ./etc/scl_enable /opt/app-root/etc/scl_enable
-
 
 # Set to non root user provided by parent image
 USER 1001
