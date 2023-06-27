@@ -1,13 +1,9 @@
-#FROM redhat/ubi8
-#FROM centos:centos8
-FROM quay.io/centos/centos:stream8
+FROM quay.io/sclorg/s2i-core-c8s:latest
 
-MAINTAINER Julian Tescher <julian@outtherelabs.com>
+MAINTAINER Jerry Han <hz@liandisys.com.cn>
 
 # Current stable version
 ENV NGINX_VERSION=1.18.0
-
-ENV HOME=/tmp
 
 # Set labels used in OpenShift to describe the builder images
 LABEL io.k8s.description="Platform for serving frontend React apps" \
